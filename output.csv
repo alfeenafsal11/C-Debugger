@@ -1,0 +1,21 @@
+ID,Bug Line,Explanation
+16,1,"Function 'RDI_BEGIN' has return type 'int' but no return statement, which means it is expected to return an integer value but does not provide any value to be returned."
+32,2,"Function 'RDI_BEGIN' has return type 'int' but no return statement, which means it is expected to return an integer value but does not provide any value to be returned, resulting in undefined behavior."
+25,1,"The variable 'write_data' is used at line 2 but was declared without initialization at line 1. This is because the ARRAY_I write_data(2) declaration does not provide any initial data for the variable, which is required for the rdi.protocol().write() method to function correctly."
+10,2,"Function 'RDI_BEGIN' has return type 'int' but no return statement, which means it is declared to return an integer value but does not actually return any value when executed."
+26,3,Missing return statement in the function 'RDI_BEGIN' which has a return type of 'int' but does not return a value.
+23,25,"The function 'ON_FIRST_INVOCATION_BEGIN' has return type 'int' but no return statement, which is expected to return a value as per its declared return type."
+4,3,"BUG : The order of arguments for the iClamp method is incorrect, iClamp low and high values are exchanged, method order of arguments."
+31,2,Variable 'vec_port1' is used at line 2 but was declared without initialization at line 1. This is an uninitialized variable bug.
+17,8,"Function 'RDI_BEGIN' has return type 'int' but does not return a value, which is expected to be used to get the first fail vector."
+27,2,"Function 'RDI_BEGIN' has return type 'int' but no return statement, which means it is expected to return an integer value but does not provide any value to be returned, resulting in undefined behavior."
+24,3,Missing return statement in the function 'RDI_BEGIN' which has a return type of 'int' but does not return a value.
+14,7,"Function 'RDI_BEGIN' has return type 'int' but does not return a value, which is a missing return statement."
+9,3,"BUG : The rdi.cogo().passNode(""id1"") and rdi.cogo().failNode(""id2"") methods are called before the rdi.cogo().begin() method, which is incorrect because the begin method is required to be called before adding nodes to the test session."
+13,3,Missing return statement in the function 'RDI_BEGIN' which has a return type of 'int' but does not return a value.
+22,3,Missing return statement in the function 'RDI_BEGIN' which has a return type of 'int' but does not return a value.
+29,4,"The function 'RDI_BEGIN' has return type 'int' but no return statement, which means it is declared to return an integer value but does not actually return any value when executed. This is a bug because it can cause unexpected behavior or errors when the returned value is used elsewhere in the code."
+2,3,"BUG : The rdi.cogo().passNode(""id1"") and rdi.cogo().failNode(""id2"") methods are called before the rdi.cogo().begin() method, which is incorrect because the begin method is required to be called before adding nodes to the test session."
+20,1,"Function 'RDI_BEGIN' has return type 'int' but no return statement, which means it is expected to return an integer value but does not provide any value to be returned."
+11,2,"Function 'RDI_BEGIN' has return type 'int' but no return statement, which means it is expected to return an integer value but does not provide any value to be returned, resulting in undefined behavior."
+3,4,"BUG : vForce set to 31 V which is out of the specified vForceRange of 30 V for an assumed AVI64, Specification of AVI64."
