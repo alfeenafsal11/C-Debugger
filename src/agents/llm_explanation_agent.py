@@ -61,7 +61,6 @@ class LLMExplanationAgent:
 
     def __init__(self, token=None, model="meta-llama/Meta-Llama-3-8B-Instruct"):
         self.token = token or os.environ.get("HF_TOKEN")
-        self.anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
         self.cache = {}
         
         if self.token and self.token != "dummy_token":
@@ -74,13 +73,8 @@ class LLMExplanationAgent:
                 max_tokens=120,
                 top_p=0.9
             )
-        elif self.anthropic_key:
-            from anthropic import AsyncAnthropic
-            self.anthropic_client = AsyncAnthropic(api_key=self.anthropic_key)
-            self.llm = None
         else:
             self.llm = None
-            self.anthropic_client = None
 
     async def explain(
         self,
@@ -117,16 +111,8 @@ class LLMExplanationAgent:
                 if self.token and self.token != "dummy_token" and self.llm:
                     response = await self.llm.acomplete(prompt)
                     explanation = response.text.strip()
-                elif self.anthropic_key and self.anthropic_client:
-                    response = await self.anthropic_client.messages.create(
-                        model="claude-3-5-sonnet-20241022",
-                        max_tokens=120,
-                        temperature=0.1,
-                        messages=[{"role": "user", "content": prompt}]
-                    )
-                    explanation = response.content[0].text.strip()
                 else:
-                    raise ValueError("No valid LLM credentials available (need HF_TOKEN or ANTHROPIC_API_KEY)")
+                    raise ValueError("No valid LLM credentials available (need HF_TOKEN)")
                 
                 # Strip markdown bolding and intro phrases if the LLM ignores instructions
                 explanation = _re.sub(r'^\*\*.*?\*\*\s*', '', explanation)

@@ -13,20 +13,14 @@ Are they semantically equivalent in identifying the root issue? (i.e. do they po
 Answer ONLY "YES" or "NO".
 """
 
-async def evaluate_single_explanation(id_, gt_exp, gen_exp, llm, anthropic_client):
+async def evaluate_single_explanation(id_, gt_exp, gen_exp, llm):
     prompt = EVAL_PROMPT.format(truth=gt_exp.strip(), generated=gen_exp.strip())
     try:
         if llm:
             response = await llm.acomplete(prompt)
             answer = response.text.strip().upper()
         else:
-            response = await anthropic_client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=10,
-                temperature=0.0,
-                messages=[{"role": "user", "content": prompt}]
-            )
-            answer = response.content[0].text.strip().upper()
+            raise ValueError("No LLM evaluator client initialized.")
         is_match = "YES" in answer
     except Exception as e:
         is_match = False
@@ -35,28 +29,19 @@ async def evaluate_single_explanation(id_, gt_exp, gen_exp, llm, anthropic_clien
 
 async def calculate_accuracy(samples_path, output_path):
     token = os.environ.get("HF_TOKEN")
-    anthropic_key = os.environ.get("ANTHROPIC_API_KEY")
     
-    if not token and not anthropic_key:
-        print("Please set either the HF_TOKEN or ANTHROPIC_API_KEY environment variable.")
+    if not token:
+        print("Please set the HF_TOKEN environment variable.")
         return
 
-    llm = None
-    anthropic_client = None
-
-    if token:
-        from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
-        llm = HuggingFaceInferenceAPI(
-            model_name="meta-llama/Meta-Llama-3-8B-Instruct",
-            token=token,
-            temperature=0.1,
-            max_tokens=10
-        )
-        print("Using Hugging Face (Llama-3-8B) for evaluation.")
-    else:
-        from anthropic import AsyncAnthropic
-        anthropic_client = AsyncAnthropic(api_key=anthropic_key)
-        print("Using Anthropic (Claude-3-5-Sonnet) for evaluation.")
+    from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+    llm = HuggingFaceInferenceAPI(
+        model_name="meta-llama/Meta-Llama-3-8B-Instruct",
+        token=token,
+        temperature=0.1,
+        max_tokens=10
+    )
+    print("Using Hugging Face (Llama-3-8B) for evaluation.")
 
     ground_truth = {}
     with open(samples_path, 'r', encoding='utf-8') as f:
@@ -79,8 +64,7 @@ async def calculate_accuracy(samples_path, output_path):
     tasks = []
     for id_, gen_exp in generated.items():
         if id_ in ground_truth:
-            gt_exp = ground_truth[id_]
-            tasks.append(evaluate_single_explanation(id_, gt_exp, gen_exp, llm, anthropic_client))
+            tasks.append(evaluate_single_explanation(id_, gt_exp, gen_exp, llm))
     
     results = await asyncio.gather(*tasks)
 
