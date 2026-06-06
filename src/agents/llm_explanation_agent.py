@@ -52,7 +52,7 @@ Explanation:"""
 
 # Retry configuration
 MAX_RETRIES = 3
-BASE_RETRY_DELAY = 60  # seconds
+BASE_RETRY_DELAY = 3  # seconds
 
 
 import asyncio
@@ -68,7 +68,7 @@ class LLMExplanationAgent:
             self.llm = HuggingFaceInferenceAPI(
                 model_name=model,
                 token=self.token,
-                timeout=60,
+                timeout=20,
                 temperature=0.1,
                 max_tokens=120,
                 top_p=0.9
