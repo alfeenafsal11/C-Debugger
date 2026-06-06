@@ -9,3 +9,9 @@ outputs/cached/
 *.log
 mcp_server.log
 
+# Large model weights - never commit these
+*.safetensors
+*.bin
+*.onnx
+src/mcp/provided_server/embedding_model/onnx/
+

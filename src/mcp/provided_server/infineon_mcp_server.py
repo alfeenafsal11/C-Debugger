@@ -1,39 +1,28 @@
-# from huggingface_hub import snapshot_download
 from pathlib import Path
-
-from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core import StorageContext, load_index_from_storage, Settings
 from llama_index.core.retrievers import VectorIndexRetriever
-
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 import math
 import os
 from fastmcp import FastMCP
 
 BASE_DIR = Path(__file__).resolve().parent
-
-embedding_path = BASE_DIR / "embedding_model"
 storage_path = BASE_DIR / "storage"
 
-if not embedding_path.exists():
-    raise FileNotFoundError(
-        f"Embedding model path missing: {embedding_path}"
-    )
-
 if not storage_path.exists():
-    raise FileNotFoundError(
-        f"Storage path missing: {storage_path}"
-    )
+    raise FileNotFoundError(f"Storage path missing: {storage_path}")
 
-embed_model = HuggingFaceEmbedding(
-    model_name=str(embedding_path)
-)
+# Use a lightweight model downloaded via HF Hub on first startup.
+# BAAI/bge-small-en-v1.5 is ~130MB vs ~430MB for bge-base - fits within 512MB RAM.
+EMBED_MODEL_NAME = os.environ.get("EMBED_MODEL_NAME", "BAAI/bge-small-en-v1.5")
+print(f"Loading embedding model: {EMBED_MODEL_NAME}")
+embed_model = HuggingFaceEmbedding(model_name=EMBED_MODEL_NAME)
 Settings.embed_model = embed_model
 
 storage_context = StorageContext.from_defaults(persist_dir=str(storage_path))
 index = load_index_from_storage(storage_context=storage_context)
 retriever = VectorIndexRetriever(index=index, similarity_top_k=20)
 
-print(f"Embedding path: {embedding_path}")
 print(f"Storage path: {storage_path}")
 print("Retriever initialized successfully.")
 
