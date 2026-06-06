@@ -96,35 +96,35 @@ def search_documents(query: str) -> list:
     nodes = retriever.retrieve(query)
     return [{"text" : ele.get_text(), "score" : ele.get_score()} for ele in nodes]
 
-print("\n================ RETRIEVAL TEST ================\n")
+if __name__ == "__main__":
+    print("\n================ RETRIEVAL TEST ================\n")
 
-test_queries = [
-    "segmentation fault caused by null pointer",
-    "array index out of bounds",
-    "syntax error in C++",
-    "memory leak in linked list",
-]
+    test_queries = [
+        "segmentation fault caused by null pointer",
+        "array index out of bounds",
+        "syntax error in C++",
+        "memory leak in linked list",
+    ]
 
-for query in test_queries:
+    for query in test_queries:
 
-    print(f"\nQUERY: {query}\n")
+        print(f"\nQUERY: {query}\n")
 
-    results = retriever.retrieve(query)
+        results = retriever.retrieve(query)
 
-    for idx, node in enumerate(results[:3]):
+        for idx, node in enumerate(results[:3]):
 
-        print(f"\nResult {idx+1}")
-        print(f"Score: {node.get_score()}")
+            print(f"\nResult {idx+1}")
+            print(f"Score: {node.get_score()}")
 
-        text = node.get_text()
+            text = node.get_text()
 
-        if len(text) > 500:
-            text = text[:500]
+            if len(text) > 500:
+                text = text[:500]
 
-        print(text)
-        print("\n" + "-" * 60)
+            print(text)
+            print("\n" + "-" * 60)
 
-if __name__ =="__main__":
-   print("Starting MCP Server....")
-   mcp.run(transport="sse")
-#    mcp.run(transport="stdio")
+    print("Starting MCP Server....")
+    mcp.run(transport="sse")
+    # mcp.run(transport="stdio")

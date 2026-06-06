@@ -9,9 +9,24 @@ import os
 # Ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
+# Import MCP and initialize sub-app
+from src.mcp.provided_server.infineon_mcp_server import mcp
+mcp_app = mcp.http_app()
+
+# Dynamically route MCP server requests to this same process
+port = os.getenv("PORT", "8000")
+os.environ["MCP_SERVER_URL"] = f"http://localhost:{port}/mcp/sse"
+
 from src.pipeline.pipeline import DebuggingPipeline
 
-app = FastAPI(title="Agentic Bug Hunter API", version="1.0.0")
+app = FastAPI(
+    title="Agentic Bug Hunter API", 
+    version="1.0.0", 
+    lifespan=mcp_app.lifespan
+)
+
+# Mount the MCP server as a sub-application
+app.mount("/mcp", mcp_app)
 
 app.add_middleware(
     CORSMiddleware,

@@ -6,3 +6,6 @@ venv/
 outputs/logs/
 outputs/cached/
 .DS_Store
+*.log
+mcp_server.log
+
