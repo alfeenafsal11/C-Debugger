@@ -10,17 +10,18 @@ RUN apt-get update && apt-get install -y \
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy and install requirements first (layer-cached)
+# Copy and install requirements first (layer-cached separately from code)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
 COPY . .
 
-# Pre-download the lightweight embedding model during build time
-# This caches the weights in the image so startup is fast and RAM-safe
-ENV HF_HOME=/app/.cache/huggingface
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('BAAI/bge-small-en-v1.5')"
+# Pre-download the ONNX embedding model at BUILD TIME.
+# fastembed uses ONNX runtime - no PyTorch needed, ~210MB model, fits in 512MB.
+# Setting FASTEMBED_CACHE_PATH keeps it inside /app so it survives.
+ENV FASTEMBED_CACHE_PATH=/app/.cache/fastembed
+RUN python -c "from fastembed import TextEmbedding; list(TextEmbedding('BAAI/bge-base-en-v1.5').embed(['warmup']))"
 
 # Set execution permissions on start.sh
 RUN chmod +x start.sh

@@ -1,13 +1,12 @@
 # Core Multi-Agent Pipeline
 llama-index==0.14.13
-llama-index-embeddings-huggingface
+llama-index-embeddings-fastembed
 llama-index-llms-huggingface-api
 fastmcp==2.14.5
 libclang
 
-# Force CPU-only torch to avoid CUDA bloat (saves ~800MB RAM)
---extra-index-url https://download.pytorch.org/whl/cpu
-torch
+# ONNX-based embedding - replaces sentence-transformers+torch (~250MB RAM saved)
+fastembed
 
 # API Server
 fastapi
