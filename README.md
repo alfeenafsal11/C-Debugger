@@ -1,4 +1,15 @@
+---
+title: Agentic Bug Hunter
+emoji: 🐛
+colorFrom: blue
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # C++ Debugger Agent — Retrieval-Augmented Code Understanding System
+
 
 ## Overview
 

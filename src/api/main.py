@@ -14,7 +14,7 @@ from src.mcp.provided_server.infineon_mcp_server import mcp
 mcp_app = mcp.http_app()
 
 # Dynamically route MCP server requests to this same process
-port = os.getenv("PORT", "8000")
+port = os.getenv("PORT", "7860")
 os.environ["MCP_SERVER_URL"] = f"http://localhost:{port}/mcp/sse"
 
 from src.pipeline.pipeline import DebuggingPipeline
