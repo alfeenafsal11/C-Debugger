@@ -1,17 +1,37 @@
+# Python
 __pycache__/
 *.pyc
+*.pyo
 .env
 .venv/
 venv/
-outputs/logs/
-outputs/cached/
-.DS_Store
+
+# Logs
 *.log
 mcp_server.log
+pipeline_run.log
 
-# Large model weights - never commit these
+# Large model weights - NEVER commit
 *.safetensors
 *.bin
 *.onnx
-src/mcp/provided_server/embedding_model/onnx/
+src/mcp/provided_server/embedding_model/
 
+# Dev & test artifacts - not needed for deployment
+tests/
+scripts/
+datasets/
+outputs/
+docs/
+config/
+requirements/
+abh-frontend/
+
+# Runtime files
+request.json
+.DS_Store
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
