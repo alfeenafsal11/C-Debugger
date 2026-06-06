@@ -6,32 +6,25 @@ __pycache__/
 .venv/
 venv/
 
-# Logs
+# Logs & runtime artifacts
 *.log
 mcp_server.log
 pipeline_run.log
+request.json
 
-# Large model weights - NEVER commit
+# Large model weights - downloaded at Docker build time, never commit
 *.safetensors
 *.bin
 *.onnx
 src/mcp/provided_server/embedding_model/
 
-# Dev & test artifacts - not needed for deployment
-tests/
-scripts/
-datasets/
-outputs/
-docs/
-config/
-requirements/
-abh-frontend/
+# Generated pipeline output (large, changes on every run)
+outputs/output.csv
+outputs/logs/
+outputs/cached/
 
-# Runtime files
-request.json
+# IDE & OS
 .DS_Store
-.pytest_cache/
-
-# IDE
 .vscode/
 .idea/
+.pytest_cache/
