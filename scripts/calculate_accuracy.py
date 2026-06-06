@@ -64,6 +64,7 @@ async def calculate_accuracy(samples_path, output_path):
     tasks = []
     for id_, gen_exp in generated.items():
         if id_ in ground_truth:
+            gt_exp = ground_truth[id_]
             tasks.append(evaluate_single_explanation(id_, gt_exp, gen_exp, llm))
     
     results = await asyncio.gather(*tasks)
