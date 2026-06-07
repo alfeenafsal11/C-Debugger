@@ -23,7 +23,7 @@ export default function Home() {
     setLoading(true);
     setResult(null);
     try {
-      const response = await fetch("http://127.0.0.1:8000/debug", {
+      const response = await fetch("https://alfeenafsal-agentic-bug-hunter.hf.space/debug", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
