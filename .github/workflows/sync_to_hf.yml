@@ -17,10 +17,10 @@ jobs:
           python-version: '3.11'
 
       - name: Install Hugging Face Hub CLI
-        run: pip install huggingface_hub
+        run: pip install -U "huggingface_hub[cli]"
 
       - name: Upload to Hugging Face Spaces
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          huggingface-cli upload alfeenafsal11/agentic-bug-hunter . --repo-type=space --exclude ".git/*" ".github/*" ".venv/*"
+          hf upload alfeenafsal11/agentic-bug-hunter . --repo-type=space --exclude ".git/*" ".github/*" ".venv/*"
