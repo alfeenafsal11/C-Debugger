@@ -14,10 +14,11 @@ jobs:
           fetch-depth: 0
           lfs: true
 
-      - name: Sync GitHub to Hugging Face Hub
-        uses: huggingface/hub-sync@v0.1.0
-        with:
-          github_repo_id: ${{ github.repository }}
-          huggingface_repo_id: alfeenafsal11/agentic-bug-hunter
-          hf_token: ${{ secrets.HF_TOKEN }}
-          repo_type: space
+      - name: Push to Hugging Face Spaces
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git remote add hf https://alfeenafsal11:$HF_TOKEN@huggingface.co/spaces/alfeenafsal11/agentic-bug-hunter
+          git push --force hf main
