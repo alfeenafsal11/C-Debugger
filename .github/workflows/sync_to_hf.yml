@@ -23,4 +23,4 @@ jobs:
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          hf upload alfeenafsal/agentic-bug-hunter . --repo-type=space --exclude ".git/*" ".github/*" ".venv/*"
+          hf upload alfeenafsal/agentic-bug-hunter . --repo-type=space --exclude ".git/*" --exclude ".github/*" --exclude ".venv/*"
