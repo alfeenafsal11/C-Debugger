@@ -102,26 +102,30 @@ class StaticBugDetector:
     def _check_out_of_bounds(self, parsed, lines):
         """Detect array accesses where index >= declared size."""
         bugs = []
-        # Find array declarations: int a[5];
-        array_sizes = {}
+        # Find array declarations: int a[5]; or int a[5] = {1, 2, 3};
+        array_decls = {}  # arr_name -> (arr_size, decl_line)
         for i, line in enumerate(lines):
-            match = re.search(r'\b(\w+)\s*\[(\d+)\]\s*;', line)
+            # Match type name[size] followed by optional initializer or semicolon
+            match = re.search(r'\b(?:int|char|float|double|long|short|auto|size_t|\w+)\s+(?:\*|\&)?\s*(\w+)\s*\[(\d+)\]', line)
             if match:
                 arr_name = match.group(1)
                 arr_size = int(match.group(2))
-                array_sizes[arr_name] = arr_size
+                array_decls[arr_name] = (arr_size, i + 1)
 
         # Find array accesses: a[10]
         for i, line in enumerate(lines):
-            for arr_name, arr_size in array_sizes.items():
+            line_no = i + 1
+            for arr_name, (arr_size, decl_line) in array_decls.items():
+                if line_no == decl_line:
+                    continue  # Skip declaration line itself
                 pattern = rf'\b{re.escape(arr_name)}\s*\[(\d+)\]'
                 for match in re.finditer(pattern, line):
                     idx = int(match.group(1))
                     if idx >= arr_size:
                         bugs.append({
-                            "line": i + 1,
+                            "line": line_no,
                             "type": "out_of_bounds_access",
-                            "detail": f"Array '{arr_name}' has size {arr_size}, but index {idx} used",
+                            "detail": f"Array '{arr_name}' has declared size {arr_size}, but index {idx} accessed",
                         })
         return bugs
 
