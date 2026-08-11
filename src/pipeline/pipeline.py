@@ -88,6 +88,14 @@ async def process_row(
         compile_result = compile_cpp(code)
         if compile_result["returncode"] != 0 or compile_result["stderr"]:
             compiler_diagnostics = parse_gcc_errors(compile_result["stderr"])
+            if not compiler_diagnostics and compile_result["stderr"].strip():
+                compiler_diagnostics = [{
+                    "file": "main.cpp",
+                    "line": 1,
+                    "column": 1,
+                    "severity": "error",
+                    "message": compile_result["stderr"].strip().splitlines()[0]
+                }]
             if compiler_diagnostics:
                 print(f"    Compiler: Detected {len(compiler_diagnostics)} diagnostics")
     except Exception as e:

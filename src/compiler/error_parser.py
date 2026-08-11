@@ -9,7 +9,8 @@ def parse_gcc_errors(stderr: str):
     diagnostics = []
 
     pattern = re.compile(
-        r"(.+?):(\d+):(\d+):\s+(warning|error|note):\s+(.*)"
+        r"((?:[a-zA-Z]:)?[^:]+):(\d+):(\d+):\s+(warning|error|note):\s+(.*)",
+        re.MULTILINE
     )
 
     for line in stderr.splitlines():

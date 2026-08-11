@@ -133,7 +133,9 @@ export default function Home() {
                   ) : (
                     <div className="bg-accent/10 border border-accent/20 rounded-xl p-4">
                       <p className="text-sm font-mono text-accent">
-                        Line {result.Bug_Line || "N/A"}: {result.Explanation || "No issues found by compiler."}
+                        {result.Explanation 
+                          ? `Line ${result.Bug_Line || "N/A"}: ${result.Explanation}`
+                          : "No static warnings or errors detected."}
                       </p>
                     </div>
                   )}
