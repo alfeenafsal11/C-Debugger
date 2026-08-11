@@ -66,29 +66,33 @@ export default function Home() {
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-180px)]">
         {/* Editor Section */}
-        <div className="lg:col-span-7 flex flex-col gap-4">
-          <div className="glass rounded-2xl overflow-hidden flex-1 relative group">
-            <div className="bg-secondary/50 px-4 py-2 border-b border-border flex items-center justify-between">
+        <div className="lg:col-span-7 flex flex-col gap-4 min-h-[450px] lg:min-h-0 h-full">
+          <div className="glass rounded-2xl overflow-hidden flex-1 min-h-0 flex flex-col relative group">
+            <div className="bg-secondary/50 px-4 py-2 border-b border-border flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-muted" />
                 <span className="text-sm font-medium text-muted">main.cpp</span>
               </div>
             </div>
-            <Editor
-              height="100%"
-              defaultLanguage="cpp"
-              theme="vs-dark"
-              value={code}
-              onChange={(v) => setCode(v || "")}
-              options={{
-                fontSize: 14,
-                minimap: { enabled: false },
-                padding: { top: 16 },
-                scrollBeyondLastLine: false,
-                smoothScrolling: true,
-                cursorSmoothCaretAnimation: "on",
-              }}
-            />
+            <div className="flex-1 min-h-0 relative w-full h-full">
+              <Editor
+                height="100%"
+                defaultLanguage="cpp"
+                theme="vs-dark"
+                value={code}
+                onChange={(v) => setCode(v || "")}
+                options={{
+                  fontSize: 14,
+                  minimap: { enabled: false },
+                  padding: { top: 16 },
+                  scrollBeyondLastLine: false,
+                  smoothScrolling: true,
+                  cursorSmoothCaretAnimation: "on",
+                  automaticLayout: true,
+                  wordWrap: "on",
+                }}
+              />
+            </div>
           </div>
         </div>
 
